@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.microsoft.sample</groupId>
+    <artifactId>azure-container-apps-mtls-sample-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>azure-container-apps-mtls-certificate-filter-reactive</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>azure-container-apps-mtls-certificate-filter-reactive</name>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>3.2.12</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
+
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>10</source>
+          <target>10</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-container-apps-maven-plugin</artifactId>
+        <!-- You can find the latest version here: https://central.sonatype.com/artifact/com.microsoft.azure/azure-container-apps-maven-plugin -->
+        <version>0.1.0</version>
+        <configuration>
+          <subscriptionId>your-subscription-id</subscriptionId>
+          <resourceGroup>your-resource-group</resourceGroup>
+          <appEnvironmentName>your-app-environment-name</appEnvironmentName>
+          <region>your-region</region>
+          <appName>your-app-name</appName>
+          <containers>
+            <container>
+              <type>code</type>
+              <directory>${project.basedir}</directory>
+              <environment>
+                <environment>
+                  <name>TRUST_STORE_PASSWORD</name>
+                  <value>${truststorePassword}</value>
+                </environment>
+              </environment>
+            </container>
+          </containers>
+          <ingress>
+            <external>true</external>
+            <targetPort>8080</targetPort>
+          </ingress>
+          <scale>
+            <minReplicas>0</minReplicas>
+            <maxReplicas>10</maxReplicas>
+          </scale>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
